@@ -11,6 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
+    baseURL: config.baseURL,
     trace: 'on-first-retry',
     video: 'on',
     viewport: { width: 1920, height: 1080 },

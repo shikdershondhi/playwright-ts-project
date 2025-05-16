@@ -57,3 +57,27 @@ class EnvironmentManager {
 
 export const envManager = EnvironmentManager.getInstance();
 export const currentEnv = envManager.getConfig();
+
+export function getEnvironmentConfig(env?: Environment) {
+  console.log(`[DEBUG] Requested env: ${env}, Process ENV: ${process.env.ENV}`);
+  const environment = env || (process.env.ENV as Environment) || 'dev';
+  console.log(`[DEBUG] Using environment: ${environment}`);
+  
+  const envPath = path.join(__dirname, '..', '.env', `.env.${environment}`);
+  dotenv.config({ path: envPath });
+
+  switch (environment) {
+    case 'dev':
+      console.log('[DEBUG] Loading dev config');
+      return { ...baseConfig, ...devConfig };
+    case 'staging':
+      console.log('[DEBUG] Loading staging config');
+      return { ...baseConfig, ...stagingConfig };
+    case 'prod':
+      console.log('[DEBUG] Loading prod config');
+      return { ...baseConfig, ...prodConfig };
+    default:
+      console.log('[DEBUG] Loading base config');
+      return baseConfig;
+  }
+}
